@@ -1,3 +1,6 @@
+Certainly! Here's the revised README.md file:
+
+```markdown
 # internsctl - Custom Linux Command for Operations
 
 **Command Version:** v0.1.0
@@ -22,20 +25,20 @@
 
 To use `internsctl`, follow these installation steps:
 
-bash
+```bash
 git clone https://github.com/your-username/internsctl.git
 cd internsctl
 chmod +x internsctl
 sudo mv internsctl /usr/local/bin/
-
+```
 
 ## Usage
 
 Run `internsctl --help` to see the available commands and options.
 
-bash
+```bash
 internsctl --help
-
+```
 
 ## Commands
 
@@ -43,71 +46,71 @@ internsctl --help
 
 Get CPU information:
 
-bash
+```bash
 internsctl cpu getinfo
-
+```
 
 ### Memory Information
 
 Get memory information:
 
-bash
+```bash
 internsctl memory getinfo
-
+```
 
 ### User Management
 
 Create a new user:
 
-bash
+```bash
 internsctl user create <username>
-
+```
 
 List all regular users:
 
-bash
+```bash
 internsctl user list
-
+```
 
 List users with sudo permissions:
 
-bash
+```bash
 internsctl user list --sudo-only
-
+```
 
 ### File Information
 
 Get information about a file:
 
-bash
+```bash
 internsctl file getinfo <file-name>
-
+```
 
 To obtain specific information about the file, use options:
 
 - To get the size of the file:
 
-  bash
+  ```bash
   internsctl file getinfo --size <file-name>
-  
+  ```
 
 - To get file permissions:
 
-  bash
+  ```bash
   internsctl file getinfo --permissions <file-name>
-  
+  ```
 
 - To get the owner of the file:
 
-  bash
+  ```bash
   internsctl file getinfo --owner <file-name>
-  
+  ```
 
 - To get the last modified time:
 
-  bash
+  ```bash
   internsctl file getinfo --last-modified <file-name>
-  
+  ```
 
 ## Contributing
 
@@ -116,6 +119,6 @@ Contributions are welcome! Follow the steps in the [Contribution Guidelines](CON
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+```
 
-
-Make sure to replace placeholder text like <username> with the actual values relevant to your project. Additionally, if your project has specific guidelines for contributors, include them in a CONTRIBUTING.md file and link to it from the README.
+Make sure to replace `<username>` with the actual values relevant to your project. If you don't have specific contribution guidelines, you can remove the reference to the CONTRIBUTING.md file from the README.
