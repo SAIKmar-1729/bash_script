@@ -1,0 +1,191 @@
+#!/bin/bash
+
+# internsctl - Custom Linux command for operations
+
+# Command version
+VERSION="v0.1.0"
+
+# Functions
+
+# Function to display manual page
+display_manual() {
+    echo "internsctl - Custom Linux command for operations"
+    echo
+    echo "Usage: internsctl [OPTIONS] COMMAND [ARGS]..."
+    echo
+    echo "Options:"
+    echo "  --help              Show this message and exit"
+    echo "  --version           Show the version and exit"
+    echo
+    echo "Commands:"
+    echo "  cpu getinfo         Get CPU information"
+    echo "  memory getinfo      Get memory information"
+    echo "  user create         Create a new user"
+    echo "  user list           List all regular users"
+    echo "  user list --sudo-only   List users with sudo permissions"
+    echo "  file getinfo        Get information about a file"
+    echo
+}
+
+# Function to display help message
+display_help() {
+    echo "Custom Linux command for operations"
+    echo
+    echo "Usage: internsctl [OPTIONS] COMMAND [ARGS]..."
+    echo
+    echo "Options:"
+    echo "  --help              Show this message and exit"
+    echo "  --version           Show the version and exit"
+    echo
+    echo "Commands:"
+    echo "  cpu getinfo         Get CPU information"
+    echo "  memory getinfo      Get memory information"
+    echo "  user create         Create a new user"
+    echo "  user list           List all regular users"
+    echo "  user list --sudo-only   List users with sudo permissions"
+    echo "  file getinfo        Get information about a file"
+    echo
+}
+
+# Function to get CPU information
+get_cpu_info() {
+    lscpu
+}
+
+# Function to get memory information
+get_memory_info() {
+    free
+}
+
+# Function to create a new user
+create_user() {
+    if [ -z "$1" ]; then
+        echo "Error: Username not provided."
+        exit 1
+    fi
+
+    sudo useradd -m "$1"
+    sudo passwd "$1"
+}
+
+# Function to list all regular users or users with sudo permissions
+list_users() {
+    if [ "$1" == "--sudo-only" ]; then
+        getent group sudo | cut -d: -f4 | tr ',' '\n'
+    else
+        getent passwd | cut -d: -f1
+    fi
+}
+
+# Function to get information about a file
+get_file_info() {
+    if [ -z "$1" ]; then
+        echo "Error: File name not provided."
+        exit 1
+    fi
+
+    file="$1"
+
+    if [ -e "$file" ]; then
+        echo "File: $file"
+        echo "Access: $(stat -c %A "$file")"
+        echo "Size(B): $(stat -c %s "$file")"
+        echo "Owner: $(stat -c %U "$file")"
+        echo "Modify: $(stat -c %y "$file")"
+
+        # Check for options
+        while [ "$#" -gt 1 ]; do
+            case "$1" in
+                --size | -s)
+                    echo "Size: $(stat -c %s "$file")"
+                    ;;
+                --permissions | -p)
+                    echo "Permissions: $(stat -c %A "$file")"
+                    ;;
+                --owner | -o)
+                    echo "Owner: $(stat -c %U "$file")"
+                    ;;
+                --last-modified | -m)
+                    echo "Last Modified: $(stat -c %y "$file")"
+                    ;;
+                *)
+                    echo "Invalid option: $1"
+                    exit 1
+                    ;;
+            esac
+            shift
+        done
+    else
+        echo "File not found: $file"
+        exit 1
+    fi
+}
+
+# Main script
+
+case "$1" in
+    --help)
+        display_help
+        ;;
+    --version)
+        echo "internsctl $VERSION"
+        ;;
+    cpu)
+        shift
+        case "$1" in
+            getinfo)
+                get_cpu_info
+                ;;
+            *)
+                display_help
+                exit 1
+                ;;
+        esac
+        ;;
+    memory)
+        shift
+        case "$1" in
+            getinfo)
+                get_memory_info
+                ;;
+            *)
+                display_help
+                exit 1
+                ;;
+        esac
+        ;;
+    user)
+        shift
+        case "$1" in
+            create)
+                shift
+                create_user "$1"
+                ;;
+            list)
+                shift
+                list_users "$1"
+                ;;
+            *)
+                display_help
+                exit 1
+                ;;
+        esac
+        ;;
+    file)
+        shift
+        case "$1" in
+            getinfo)
+                shift
+                get_file_info "$1"
+                ;;
+            *)
+                display_help
+                exit 1
+                ;;
+        esac
+        ;;
+    *)
+        display_help
+        exit 1
+        ;;
+esac
